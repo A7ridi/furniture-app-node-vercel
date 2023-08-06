@@ -1,7 +1,8 @@
+const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const Product = require("../models/Products");
 
 module.exports = {
-  createProduct: async (req, res) => {
+  createProduct: catchAsyncErrors(async (req, res) => {
     const products = await Product.create(req.body);
     try {
       await products.save();
@@ -9,9 +10,9 @@ module.exports = {
     } catch (error) {
       res.status(500).json("Failed to create product");
     }
-  },
+  }),
 
-  getAllProducts: async (req, res) => {
+  getAllProducts: catchAsyncErrors(async (req, res) => {
     try {
       const products = await Product.find();
       res.status(200).json(products);
@@ -19,28 +20,19 @@ module.exports = {
       console.log("error", error.message);
       res.status(500).json("Failed to fetch products");
     }
-  },
+  }),
 
-  getProduct: async (req, res) => {
+  getProduct: catchAsyncErrors(async (req, res) => {
     try {
       const product = await Product.findById(req.params.id);
       res.status(200).json(product);
     } catch (error) {
       res.status(500).json("Failed to fetch the product");
     }
-  },
+  }),
 
-  searchProduct: async (req, res) => {
+  searchProduct: catchAsyncErrors(async (req, res) => {
     try {
-      // const result = await Product.find({
-      //   $or: [
-      //     { title: { $regex: req.params.key } },
-      //     { description: { $regex: req.params.key } },
-      //     { supplier: { $regex: req.params.key } },
-      //     { product_location: { $regex: req.params.key } },
-      //   ],
-      // });
-
       const result = await Product.aggregate([
         {
           $search: {
@@ -59,5 +51,5 @@ module.exports = {
       console.log({ error });
       res.status(500).json("Failed to fetch the products");
     }
-  },
+  }),
 };

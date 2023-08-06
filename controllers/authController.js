@@ -1,12 +1,10 @@
 const User = require("../models/User");
-// const CryptoJS = require("crypto");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-
-const { SECRET } = process.env;
+const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 
 module.exports = {
-  createUser: async (req, res) => {
+  createUser: catchAsyncErrors(async (req, res) => {
     const { username, email, password, location } = req.body;
     const newUser = new User({
       username,
@@ -21,9 +19,9 @@ module.exports = {
     } catch (error) {
       res.status(500).json({ message: error });
     }
-  },
+  }),
 
-  loginUser: async (req, res) => {
+  loginUser: catchAsyncErrors(async (req, res) => {
     try {
       const { email, password } = req.body;
       const user = await User.findOne({ email });
@@ -58,9 +56,9 @@ module.exports = {
     } catch (error) {
       res.status(500).json({ message: error });
     }
-  },
+  }),
 
-  getUser: async (req, res) => {
+  getUser: catchAsyncErrors(async (req, res) => {
     try {
       const { id } = req.params;
       const user = await User.findById(id);
@@ -68,5 +66,5 @@ module.exports = {
     } catch (error) {
       res.status(500).json({ message: error });
     }
-  },
+  }),
 };
