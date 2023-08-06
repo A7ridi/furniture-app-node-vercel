@@ -1,6 +1,6 @@
 {
-  "name": "ecommerce-node-express-mongo",
-  "version": "1.0.0",
+  "name": "node-express-ecommerce-api",
+  "version": "1.0.1",
   "description": "",
   "main": "index.js",
   "scripts": {
